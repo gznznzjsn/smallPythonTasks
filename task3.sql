@@ -11,7 +11,7 @@ ORDER BY 3 DESC
 LIMIT 10;
 
 --3
-SELECT category.name, SUM(payment.amount) OVER(PARTITION BY category.name) AS payment_amount FROM category
+SELECT DISTINCT category.name, SUM(payment.amount) OVER(PARTITION BY category.name) AS payment_amount FROM category
 JOIN film_category USING(category_id)
 JOIN film USING(film_id)
 JOIN inventory USING(film_id)
@@ -44,7 +44,7 @@ ORDER BY 3 DESC;
 					
 
 --6
-SELECT city.city, COUNT(customer.active) OVER(PARTITION BY city.city_id) AS active_quantity,
+SELECT DISTINCT city.city, SUM(customer.active) OVER(PARTITION BY city.city_id) AS active_quantity,
 	SUM(ABS( customer.active-1)) OVER(PARTITION BY city.city_id) AS inactive_quantity FROM customer 
 JOIN address USING(address_id)
 JOIN city USING(city_id)
