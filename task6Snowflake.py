@@ -39,7 +39,7 @@ with DAG("SNOWFLAKE", schedule_interval=None, catchup=False, start_date=datetime
 
     task_create = SnowflakeOperator(
         task_id='create_tables_and_streams',
-        snowflake_conn_id='snowflake_connection',
+        snowflake_conn_id=conn_id,
         sql="""create or replace TABLE raw_table (
             "_ID" VARCHAR(16777216),
             "IOS_App_Id" NUMBER(38,0),
@@ -69,7 +69,7 @@ with DAG("SNOWFLAKE", schedule_interval=None, catchup=False, start_date=datetime
 
     task_insert_stage = SnowflakeOperator(
         task_id='insert_stage_table',
-        snowflake_conn_id='snowflake_connection',
+        snowflake_conn_id=conn_id,
         sql="""insert into stage_table select "_ID",
             "IOS_App_Id",
             "Title",
@@ -92,7 +92,7 @@ with DAG("SNOWFLAKE", schedule_interval=None, catchup=False, start_date=datetime
     )
     task_insert_master = SnowflakeOperator(
         task_id='insert_master_table',
-        snowflake_conn_id='snowflake_connection',
+        snowflake_conn_id=conn_id,
         sql="""insert into master_table select "_ID",
             "IOS_App_Id",
             "Title",
